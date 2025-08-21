@@ -79,18 +79,17 @@ class _BlockchainJobsScreenState extends State<BlockchainJobsScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Logo icon (dark square with white pattern)
+                    // Logo icon dengan design baru
                     Container(
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.indigo[800],
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Icon(
-                        CupertinoIcons.star_fill,
-                        color: Colors.white,
-                        size: 24,
+                      child: CustomPaint(
+                        size: const Size(40, 40),
+                        painter: AppLogoPainter(),
                       ),
                     ),
                     
@@ -325,7 +324,7 @@ class _BlockchainJobsScreenState extends State<BlockchainJobsScreen> {
                     children: [
                       Row(
                         children: [
-                          // Company Logo
+                          // Company Logo dengan Solana dari asset
                           Container(
                             width: 48,
                             height: 48,
@@ -334,10 +333,19 @@ class _BlockchainJobsScreenState extends State<BlockchainJobsScreen> {
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(color: Colors.grey[300]!),
                             ),
-                            child: const Icon(
-                              CupertinoIcons.triangle_fill,
-                              color: Colors.black,
-                              size: 24,
+                            child: Center(
+                              child: Image.asset(
+                                'asset/Solana (SOL).png',
+                                width: 32,
+                                height: 32,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Icon(
+                                    CupertinoIcons.bitcoin,
+                                    color: Colors.grey[600],
+                                    size: 24,
+                                  );
+                                },
+                              ),
                             ),
                           ),
                           
@@ -534,4 +542,89 @@ class _BlockchainJobsScreenState extends State<BlockchainJobsScreen> {
       ],
     );
   }
+} 
+
+class AppLogoPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.fill;
+    
+    final center = Offset(size.width / 2, size.height / 2);
+    final diamondSize = size.width * 0.15;
+    
+    // Gambar empat diamond yang membentuk pola cross
+    // Diamond atas
+    _drawDiamond(canvas, center + Offset(0, -diamondSize * 1.5), diamondSize, paint);
+    
+    // Diamond bawah
+    _drawDiamond(canvas, center + Offset(0, diamondSize * 1.5), diamondSize, paint);
+    
+    // Diamond kiri
+    _drawDiamond(canvas, center + Offset(-diamondSize * 1.5, 0), diamondSize, paint);
+    
+    // Diamond kanan
+    _drawDiamond(canvas, center + Offset(diamondSize * 1.5, 0), diamondSize, paint);
+  }
+  
+  void _drawDiamond(Canvas canvas, Offset center, double size, Paint paint) {
+    final path = Path();
+    path.moveTo(center.dx, center.dy - size);
+    path.lineTo(center.dx + size, center.dy);
+    path.lineTo(center.dx, center.dy + size);
+    path.lineTo(center.dx - size, center.dy);
+    path.close();
+    canvas.drawPath(path, paint);
+  }
+  
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class SolanaLogoPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.fill;
+    
+    final center = Offset(size.width / 2, size.height / 2);
+    final rectWidth = size.width * 0.6;
+    final rectHeight = size.height * 0.15;
+    
+    // Gambar logo Solana dengan tiga garis horizontal yang tumpang tindih
+    // Garis atas
+    canvas.drawRect(
+      Rect.fromCenter(
+        center: center + Offset(0, -rectHeight * 1.5),
+        width: rectWidth,
+        height: rectHeight,
+      ),
+      paint,
+    );
+    
+    // Garis tengah
+    canvas.drawRect(
+      Rect.fromCenter(
+        center: center,
+        width: rectWidth,
+        height: rectHeight,
+      ),
+      paint,
+    );
+    
+    // Garis bawah
+    canvas.drawRect(
+      Rect.fromCenter(
+        center: center + Offset(0, rectHeight * 1.5),
+        width: rectWidth,
+        height: rectHeight,
+      ),
+      paint,
+    );
+  }
+  
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 } 
